@@ -231,6 +231,7 @@ void modulateSnd(void)
 		{
 			gClutchTime = 0;
 			fade_volume_to_zero(&sound, &sound_two, 100, ma_sound_get_volume(&sound), ma_sound_get_volume(&sound_two));
+			Sleep(200);
 			gPitchModifier = gPitchModTarget;
 			while (gShiftValue)
 			{

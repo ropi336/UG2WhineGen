@@ -9,7 +9,7 @@
 
 // Global variables
 #define _IsRacing 0x0089E7B0
-#define _IsCutscene 0x0082BCA0
+#define _IsCutscene 0x0087619C //0082BCA0
 #define _TheGameFlowManager 0x8654A4
 #define _IsLostFocus 0x8709E0
 #define _IsPaused 0x00874E58//0x008384B8

@@ -504,7 +504,7 @@ bool WriteToConsole(LPVOID)
 			L" IsOnFocus: " + std::to_wstring(IsOnFocus) + L" TheGameFlowManager: " + std::to_wstring(TheGameFlowManager) +
 			L" sndCurrentLvl: " + std::to_wstring(sndCurrentLvl) + L" gPhoneCall: " + std::to_wstring(gPhoneCall) +
 			L" IniMult: " + std::to_wstring(IniMult) + L" gConLine: " + std::to_wstring(gConLine) + L" gWhineEnabled: " +
-			std::to_wstring(gWhineEnabled) + L" CarInput: " + conWstring(CarInput)
+			std::to_wstring(gWhineEnabled) + L" CarInput: " + conWstring(CarInput) + L" gCutscene: " + std::to_wstring(gCutscene)
 		
 		);
 		renderToConsole(curVars);
