@@ -33,6 +33,8 @@ float gPitchModifier = 0.0f, gPitchModTarget = 0.0f;
 bool gWhineEnabled = true;
 int gClutchTime = 0;
 bool gWhineAll = false;
+bool gOnlyUpgradedTransmission = true, gAllowUniqueTransmission = true;
+volatile LONG gTransmissionUpgradeState = -1;
 float gSpeed = 0.0f;
 float gSpeedLast = 0.0f;
 float gPitchMin = 0.3, gPitchMax = 1.0;

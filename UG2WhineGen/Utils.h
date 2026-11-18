@@ -60,6 +60,9 @@ void InitData()
 		iniReader.WriteFloat("Settings", "Volume", 1.0);
 		iniReader.WriteBoolean("Settings", "EnableWhine", true);
 		iniReader.WriteString("Settings", "CarList", "ALL");
+		iniReader.WriteBoolean("Settings", "OnlyUpgradedTransmission", true);
+		iniReader.WriteBoolean("Settings", "AllowUniqueTransmission", true);
+		CarInput = "ALL";
 		coutCustom("Couldn't find file", "Oh no :(");
 	}
 	else
@@ -77,6 +80,9 @@ void InitData()
 		}
 	}
 
+	gOnlyUpgradedTransmission = iniReader.ReadBoolean("Settings", "OnlyUpgradedTransmission", true);
+	gAllowUniqueTransmission = iniReader.ReadBoolean("Settings", "AllowUniqueTransmission", true);
+
 	if (CarInput == std::string("ALL"))
 	{
 		gWhineAll = true;
@@ -91,21 +97,19 @@ void InitData()
 
 bool ValidateCar()
 {
-	if (gWhineAll == true)
-	{
-		gWhineEnabled = true;
-		return true;
-	}
-	gCarNameChar = &gCarName[0];
-	for (auto it = carList.begin(); it != carList.end(); ++it)
-	{
-		if (gCarNameChar == (*it))
-		{
-			gWhineEnabled = true;
-			return true;
-		}
-	}
-	return gWhineEnabled;
+    bool carAllowed = gWhineAll;
+    if (!carAllowed)
+    {
+        for (const auto& name : carList)
+        {
+            if (gCarName == name) { carAllowed = true; break; }
+        }
+    }
+
+    LONG state = InterlockedCompareExchange(&gTransmissionUpgradeState, 0, 0);
+    bool transmissionAllowed = UG2Transmission::IsEligible(state, gOnlyUpgradedTransmission, gAllowUniqueTransmission);
+    gWhineEnabled = carAllowed && transmissionAllowed;
+    return gWhineEnabled;
 }
 
 void initSnd(void)

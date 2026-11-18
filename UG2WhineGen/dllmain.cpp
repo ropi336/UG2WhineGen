@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "stdio.h"
+#include "TransmissionUpgradeDetector.h"
 #include "Utils.h"
 #include <string>
 #include <algorithm>
@@ -267,6 +268,8 @@ void Update()
 	gGear = GetGear();
 	gSpeed = GetSpeed();
 	gCarName = GetCarName();
+	LONG state = TheGameFlowManager == 6 && IsOnFocus ? UG2Transmission::Detect() : UG2Transmission::Unavailable;
+	InterlockedExchange(&gTransmissionUpgradeState, state);
 	gShiftValue = GetShiftValue();
 	if (!gRacing)
 	{
@@ -306,24 +309,33 @@ bool ProcessWhine(LPVOID)
 		if (TheGameFlowManager == 6 && IsOnFocus)
 		{
 			toggleSound();
-			if (gGlobalEnable == true)
-			{
-				IsStopped = false;
-				if (TriedToPlay == false)
-				{
-					HasPlayed = playSnd();
-					TriedToPlay = true;
-				}
-				else if (HasPlayed == true)
-				{
-					processGearbox();
-					modulateSnd();
-				}
-			}
-			else
-			{
-				skipGear = true;
-			}
+            if (gGlobalEnable && ValidateCar())
+            {
+                IsStopped = false;
+                if (!HasPlayed)
+                {
+                    HasPlayed = playSnd();
+                    TriedToPlay = HasPlayed;
+                }
+                else
+                {
+                    processGearbox();
+                    modulateSnd();
+                }
+            }
+            else
+            {
+                // Desativa imediatamente o som quando troca de carro ou remove o upgrade.
+                ma_sound_stop(&sound);
+                ma_sound_stop(&sound_two);
+                ma_sound_stop(&sound_reverse);
+                HasPlayed = false;
+                TriedToPlay = false;
+                IsStopped = true;
+                gWhineEnabled = false;
+                skipGear = true;
+                gGearOld = 1;
+            }
 		}
 		Sleep(16.6666);
 	}

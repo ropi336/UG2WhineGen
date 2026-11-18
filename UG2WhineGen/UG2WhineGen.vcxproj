@@ -82,15 +82,13 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
     </Link>
-    <PostBuildEvent>
-      <Command>copy "$(TargetDir)\*asi" "C:\EXCUSE_ME\GAMES\NFSUG2\scripts" /Y</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="GlobalVariables.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="TransmissionUpgradeDetector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
